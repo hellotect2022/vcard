@@ -1,6 +1,7 @@
 import React, { useState,useRef } from "react";
 import {QRCodeCanvas} from "qrcode.react";
 import styled from "styled-components";
+import logo from "./logo.png"
 
 const RootDiv = styled.div`
   max-width: 400px;
@@ -10,6 +11,7 @@ const RootDiv = styled.div`
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border: 1px solid #ddd; 
+  text-align: center;
 `
 
 const Input = styled.input`
@@ -82,17 +84,19 @@ const VCardGenerator = () => {
   const qrRef = useRef(null);
 
   const generateVCard = () => {
-    const vcardData = `BEGIN:VCARD\n`.concat(`VERSION:3.0\n`,
-      `N:${lastName};${name}\n`,
-      `FN:${lastName}${name}\n`,
-      `ORG:${company}\n`,
-      `TITLE:${jobTitle}\n`,
+    const vcardData = `BEGIN:VCARD\n`.concat(`VERSION:2.1\n`,
+      `N;CHARSET=UTF-8:${lastName};${name}\n`,
+      `FN;CHARSET=UTF-8:${lastName}${name}\n`,
+      `ORG;CHARSET=UTF-8:${company}\n`,
+      `TITLE;CHARSET=UTF-8:${jobTitle}\n`,
       `TEL;CELL:${phone}\n`,
+      //`TEL;TYPE=WORK;VOICE:${companyCall}\n`,
+      //`TEL;TYPE=FAX:${companyFax}\n`,
       `TEL;WORK;VOICE:${companyCall}\n`,
       `TEL;WORK;FAX:${companyFax}\n`,
       `EMAIL:${email}\n`,
-      `URL;TYPE=WORK:${companyUrl}\n`,
-      `NOTE:${note}\n`,
+      `URL:${companyUrl}\n`,
+      `NOTE;CHARSET=UTF-8:${note}\n`,
       `END:VCARD`);
     setVcard(vcardData);
     //console.log("Generated VCard Data:\n", vcardData);
@@ -113,6 +117,7 @@ const VCardGenerator = () => {
 
   return (
     <RootDiv>
+      <img src={logo} style={{ width: "200px", height: "auto"}}/>
       <h2 style={{ fontSize: "24px", fontWeight: "bold", textAlign: "center", color: "#333" }}>VCard 생성기</h2>
       <Input type="text" placeholder="성" value={lastName} onChange={(e) => setLastName(e.target.value)} />
       <Input type="text" placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} />
